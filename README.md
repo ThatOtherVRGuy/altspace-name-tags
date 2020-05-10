@@ -17,3 +17,5 @@ Displays a menu of name tags that avatars can wear. Showcases avatar attachments
 ## Attribution
 
 Hat models taken from a sample in the previous AltspaceVR SDK.
+
+Test comment by BenHolfeld
