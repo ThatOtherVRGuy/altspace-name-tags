@@ -55,7 +55,7 @@ export default class NameTag {
 	private prefabs: { [key: string]: MRE.Prefab } = {};
 	// Container for instantiated name tags.
 	private attachedNameTags = new Map<MRE.Guid, MRE.Actor>();
-	private tagColor: MRE.Color3 = MRE.Color3.White();
+	private tagColor: MRE.Color3 = MRE.Color3.Black();
 	private tagDistance = 0.0; // 'mid'
 	private tagStickerId = "plain";
 	private tagFontFamily: MRE.TextFontFamily = MRE.TextFontFamily.SansSerif;
