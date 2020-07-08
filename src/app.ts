@@ -59,6 +59,9 @@ export default class NameTag {
 	private tagDistance = 0.0; // 'mid'
 	private tagStickerId = "plain";
 	private tagFontFamily: MRE.TextFontFamily = MRE.TextFontFamily.SansSerif;
+	private italic = false;
+	private menuTextHeight = 0.3;
+	private menuTextVertSpace = .05;
 	//private tagBackAlso: boolean = false;
 
 	/**
@@ -116,6 +119,7 @@ export default class NameTag {
 		const menu = MRE.Actor.Create(this.context, {});
 		let y = -0.30;
 		let x = -1.25;
+		const vSpace = this.menuTextHeight + this.menuTextVertSpace;
 
 		// Create a label for the menu title.
 		MRE.Actor.Create(this.context, {
@@ -134,7 +138,7 @@ export default class NameTag {
 				}
 			}
 		});
-		y = y + 0.4;
+		y = y + vSpace;
 
 		// Create menu button
 		const buttonMesh = this.assets.createBoxMesh('button', 0.3, 0.3, 0.01);
@@ -142,28 +146,34 @@ export default class NameTag {
 		this.createFontButton (buttonMesh, menu, x, y, "Serif", MRE.TextFontFamily.Serif);
 		x = x + 2.0;
 		this.createFontButton (buttonMesh, menu, x, y, "Sans-Serif", MRE.TextFontFamily.SansSerif);
-		y = y + 0.4;
+		y = y + vSpace;
+
+		x = x - 2.0;
+		this.createStyleButton (buttonMesh, menu, x, y, "Plain", false);
+		x = x + 2.0;
+		this.createStyleButton (buttonMesh, menu, x, y, "<i>Italic</i>", true);
+		y = y + vSpace;
 
 		x = -1.0;
 		this.createDistanceButton (buttonMesh, menu, x, y, "Human", 0.0);
 		x = x + 2.5;
 		this.createDistanceButton (buttonMesh, menu, x, y, "Robot", 0.1);
-		y = y + 0.4;
+		y = y + vSpace;
 
 		const yColors = y;
 		x = -1.25;
 		this.createColorButton (buttonMesh, menu, x, y, "Red", MRE.Color3.Red());
-		y = y + 0.4;
+		y = y + vSpace;
 		this.createColorButton (buttonMesh, menu, x, y, "Blue", MRE.Color3.Blue());
-		y = y + 0.4;
+		y = y + vSpace;
 		this.createColorButton (buttonMesh, menu, x, y, "Green", MRE.Color3.Green());
 
 		x = 1.0;
 		y = yColors;
 		this.createColorButton (buttonMesh, menu, x, y, "Black", MRE.Color3.Black());
-		y = y + 0.4;
+		y = y + vSpace;
 		this.createColorButton (buttonMesh, menu, x, y, "White", MRE.Color3.White());
-		y = y + 0.4;
+		y = y + vSpace;
 		this.createColorButton (buttonMesh, menu, x, y, "Yellow", MRE.Color3.Yellow());
 
 		/*
@@ -250,7 +260,7 @@ export default class NameTag {
 				name: 'label',
 				text: {
 					contents: colorName,
-					height: 0.4,
+					height: this.menuTextHeight,
 					color: col,
 					anchor: MRE.TextAnchorLocation.MiddleLeft
 				},
@@ -290,7 +300,7 @@ export default class NameTag {
 				name: 'label',
 				text: {
 					contents: labelText,
-					height: 0.4,
+					height: this.menuTextHeight,
 					color: MRE.Color3.Black(),
 					anchor: MRE.TextAnchorLocation.MiddleLeft
 				},
@@ -330,7 +340,7 @@ export default class NameTag {
 				name: 'label',
 				text: {
 					contents: labelText,
-					height: 0.4,
+					height: this.menuTextHeight,
 					color: MRE.Color3.Black(),
 					anchor: MRE.TextAnchorLocation.MiddleLeft,
 					font: fontFam
@@ -342,6 +352,45 @@ export default class NameTag {
 		});
 	}
 
+	///
+	/// TODO: Make generic 'create button' which takes the 'set' function as a param, rather than all this dup code
+	///
+	private createStyleButton (buttonMesh: MRE.Mesh, menu: MRE.Actor, x: number, y: number,
+		labelText: string, italic: boolean) {
+		// Create a clickable button.
+		const button = MRE.Actor.Create(this.context, {
+			actor: {
+				parentId: menu.id,
+				name: labelText,
+				appearance: { meshId: buttonMesh.id },
+				collider: { geometry: { shape: MRE.ColliderType.Auto } },
+				transform: {
+					local: { position: { x, y, z: 0 } }
+				}
+			}
+		});
+
+		// Set a click handler on the button.
+		button.setBehavior(MRE.ButtonBehavior)
+				.onClick(user => { this.italic = italic; this.wearNameTag(user.id); });
+
+		// Create a label for the menu entry.
+		MRE.Actor.Create(this.context, {
+			actor: {
+				parentId: menu.id,
+				name: 'label',
+				text: {
+					contents: labelText,
+					height: this.menuTextHeight,
+					color: MRE.Color3.Black(),
+					anchor: MRE.TextAnchorLocation.MiddleLeft
+				},
+				transform: {
+					local: { position: { x: x + 0.25, y, z: 0 } }
+				}
+			}
+		});
+	}
 
 	/**
 	 * Preload all name tag resources. This makes instantiating them faster and more efficient.
@@ -419,11 +468,15 @@ export default class NameTag {
 		if (theName.length > 4) {
 			height = height * (1.0 - (theName.length - 4) / 10.0);
 		}
+		let displayName = this.context.user(userId).name;
+		if (this.italic){
+			displayName = "<i>" + displayName + "</i>";
+		}
 		this.attachedNameTags.set(userId, MRE.Actor.Create(this.context, {
 			actor: {
 				parentId: newNameTagActor.id,
 				text: {
-					contents: this.context.user(userId).name,
+					contents: displayName,
 					height: height,
 					anchor: MRE.TextAnchorLocation.MiddleCenter,
 					color: this.tagColor,
