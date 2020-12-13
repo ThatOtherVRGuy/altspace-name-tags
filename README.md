@@ -1,5 +1,8 @@
 Displays a menu of name tags that avatars can wear. Showcases avatar attachments. Adapted from 'Wear a Hat'
 
+## Updates
+0.2.0 now on the .20 SDK with Cursive font default
+
 ## Editing
 
 * Open this folder in VSCode.

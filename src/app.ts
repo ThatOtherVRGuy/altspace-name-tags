@@ -58,7 +58,7 @@ export default class NameTag {
 	private tagColor: MRE.Color3 = MRE.Color3.Black();
 	private tagDistance = 0.0; // 'mid'
 	private tagStickerId = "plain";
-	private tagFontFamily: MRE.TextFontFamily = MRE.TextFontFamily.SansSerif;
+	private tagFontFamily: MRE.TextFontFamily = MRE.TextFontFamily.Cursive;
 	private italic = false;
 	private menuTextHeight = 0.3;
 	private menuTextVertSpace = .05;
@@ -144,11 +144,13 @@ export default class NameTag {
 		const buttonMesh = this.assets.createBoxMesh('button', 0.3, 0.3, 0.01);
 
 		this.createFontButton (buttonMesh, menu, x, y, "Serif", MRE.TextFontFamily.Serif);
-		x = x + 2.0;
+		x = x + 1.25;
 		this.createFontButton (buttonMesh, menu, x, y, "Sans-Serif", MRE.TextFontFamily.SansSerif);
+		x = x + 2;
+		this.createFontButton (buttonMesh, menu, x, y, "Cursive", MRE.TextFontFamily.Cursive);
 		y = y + vSpace;
 
-		x = x - 2.0;
+		x = x - 3.25;
 		this.createStyleButton (buttonMesh, menu, x, y, "Plain", false);
 		x = x + 2.0;
 		this.createStyleButton (buttonMesh, menu, x, y, "<i>Italic</i>", true);
