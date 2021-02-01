@@ -156,12 +156,13 @@ export default class NameTag {
 		this.createStyleButton (buttonMesh, menu, x, y, "<i>Italic</i>", true);
 		y = y + vSpace;
 
+		/*
 		x = -1.0;
 		this.createDistanceButton (buttonMesh, menu, x, y, "Human", 0.0);
 		x = x + 2.5;
 		this.createDistanceButton (buttonMesh, menu, x, y, "Robot", 0.1);
 		y = y + vSpace;
-
+*/
 		const yColors = y;
 		x = -1.25;
 		this.createColorButton (buttonMesh, menu, x, y, "Red", MRE.Color3.Red());
@@ -174,7 +175,7 @@ export default class NameTag {
 		y = yColors;
 		this.createColorButton (buttonMesh, menu, x, y, "Black", MRE.Color3.Black());
 		y = y + vSpace;
-		this.createColorButton (buttonMesh, menu, x, y, "White", MRE.Color3.White());
+		this.createColorButton (buttonMesh, menu, x, y, "Purple", MRE.Color3.Purple());
 		y = y + vSpace;
 		this.createColorButton (buttonMesh, menu, x, y, "Yellow", MRE.Color3.Yellow());
 
